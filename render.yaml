@@ -16,7 +16,7 @@ services:
       - key: APP_URL
         value: https://rg-ambulance.onrender.com
       - key: DB_CONNECTION
-        value: mysql
+        value: pgsql
       - key: DB_HOST
         fromDatabase:
           name: rg-ambulance-db
@@ -49,5 +49,5 @@ services:
 databases:
   - name: rg-ambulance-db
     plan: free
-    databaseType: mysql
+    databaseType: postgresql
     ipAllowList: []
