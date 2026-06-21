@@ -36,6 +36,8 @@ if [ -n "$DB_HOST" ]; then
     done
     echo "Running migrations..."
     php artisan migrate --force
+    echo "Seeding database..."
+    php artisan db:seed --force || true
 fi
 
 # Storage link
