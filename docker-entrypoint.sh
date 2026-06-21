@@ -18,6 +18,9 @@ if [ ! -f .env ]; then
     done
 fi
 
+# Unset APP_KEY from env so Laravel uses the .env value, not Render's injected env var
+unset APP_KEY
+
 # Generate APP_KEY if not already set
 if ! grep -q "APP_KEY=base64" .env 2>/dev/null; then
     php artisan key:generate --force
