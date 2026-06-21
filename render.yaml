@@ -49,5 +49,4 @@ services:
 databases:
   - name: rg-ambulance-db
     plan: free
-    databaseType: postgresql
     ipAllowList: []
