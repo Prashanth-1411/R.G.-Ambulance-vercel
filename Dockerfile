@@ -20,6 +20,11 @@ RUN apt-get update && apt-get install -y \
 # PHP extensions
 RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip intl
 
+# PHP.ini settings
+RUN echo "upload_max_filesize=64M" > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size=64M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "memory_limit=256M" >> /usr/local/etc/php/conf.d/uploads.ini
+
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
