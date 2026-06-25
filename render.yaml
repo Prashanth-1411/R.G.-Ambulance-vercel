@@ -1,21 +1,22 @@
 services:
   - type: web
     name: rg-ambulance
-    env: php
+    runtime: php
     plan: free
 
     buildCommand: |
       composer install --optimize-autoloader --no-dev --no-interaction
       php artisan storage:link
-      php artisan event:cache
       php artisan config:cache
       php artisan route:cache
       php artisan view:cache
       php artisan migrate --force
 
+    startCommand: php artisan serve --host 0.0.0.0 --port $PORT
+
     envVars:
       - key: APP_NAME
-        value: R.G. Ambulance Service
+        value: "R.G. Ambulance Service"
 
       - key: APP_ENV
         value: production
@@ -58,6 +59,3 @@ services:
 
       - key: LOG_CHANNEL
         value: stderr
-
-      - key: APP_MAINTENANCE_DRIVER
-        value: file
