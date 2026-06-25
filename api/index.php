@@ -6,6 +6,8 @@ require __DIR__.'/../vendor/autoload.php';
 
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
-$app->handleRequest(
-    Illuminate\Http\Request::capture()
-);
+if (getenv('APP_STORAGE_PATH')) {
+    $app->useStoragePath(getenv('APP_STORAGE_PATH'));
+}
+
+$app->handleRequest(Illuminate\Http\Request::capture());
