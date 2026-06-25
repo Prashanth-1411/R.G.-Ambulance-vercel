@@ -38,7 +38,7 @@
         }
     },
     "scripts": {
-        "vercel": [
+        "vercel-build": [
             "@php -r \"@mkdir('storage/framework/views', 0755, true); @mkdir('storage/framework/cache/data', 0755, true);\"",
             "@php artisan config:cache",
             "@php artisan route:cache",
