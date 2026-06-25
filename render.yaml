@@ -1,0 +1,55 @@
+services:
+  - type: web
+    name: rg-ambulance
+    env: php
+    plan: free
+    buildCommand: composer install --optimize-autoloader --no-dev --no-interaction && php artisan storage:link && php artisan event:cache && php artisan config:cache && php artisan route:cache && php artisan view:cache
+    postDeployCommand: php artisan migrate --force
+    envVars:
+      - key: APP_NAME
+        value: R.G. Ambulance Service
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        value: https://rg-ambulance.onrender.com
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: rg-ambulance-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: rg-ambulance-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: rg-ambulance-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: rg-ambulance-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: rg-ambulance-db
+          property: password
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_STORE
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: APP_MAINTENANCE_DRIVER
+        value: file
+
+databases:
+  - name: rg-ambulance-db
+    plan: free
+    ipAllowList: []
