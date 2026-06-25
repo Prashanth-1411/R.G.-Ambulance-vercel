@@ -1,0 +1,48 @@
+RewriteEngine On
+RewriteBase /R.G.-Ambulance-master/
+
+# Force HTTPS (uncomment in production)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/R.G.-Ambulance-master/$1 [R=301,L]
+
+# Remove trailing slash
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /R.G.-Ambulance-master/$1 [R=301,L]
+
+# Blog post: /blog/slug
+RewriteRule ^blog/([a-zA-Z0-9_-]+)$ blog-post.php?slug=$1 [L,QSA]
+
+# SEO-friendly pages
+RewriteRule ^ambulance-services$ ambulance-services.php [L,QSA]
+RewriteRule ^funeral-services$ funeral-services.php [L,QSA]
+RewriteRule ^contact$ contact.php [L,QSA]
+RewriteRule ^blog$ blog.php [L,QSA]
+RewriteRule ^testimonials$ testimonials.php [L,QSA]
+RewriteRule ^about$ about.php [L,QSA]
+RewriteRule ^gallery$ gallery.php [L,QSA]
+
+# Admin panel
+RewriteRule ^admin$ admin/index.php [L,QSA]
+RewriteRule ^admin/login$ admin/login.php [L,QSA]
+RewriteRule ^admin/dashboard$ admin/dashboard.php [L,QSA]
+
+# Handle 404
+ErrorDocument 404 /R.G.-Ambulance-master/404.php
+
+# Security
+<FilesMatch "\.(env|sql|md|log|json)$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^(config|db|functions|session|csrf)\.php$">
+    Require all denied
+</FilesMatch>
+
+# Cache static assets
+<FilesMatch "\.(css|js|jpg|jpeg|png|gif|ico|svg|webp|woff2?)$">
+    Header set Cache-Control "max-age=2592000, public"
+</FilesMatch>
+
+# PHP protections
+php_flag display_errors Off
+php_value date.timezone Asia/Kolkata

@@ -1,0 +1,7 @@
+README.md
+.gitignore
+**/.env
+**/.env.example
+backend/admin/src
+backend/generated
+backend/uploads
