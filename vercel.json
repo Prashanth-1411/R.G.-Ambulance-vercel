@@ -1,15 +1,9 @@
 {
     "version": 2,
-    "framework": null,
-    "buildCommand": null,
     "builds": [
         {
             "src": "api/index.php",
-            "use": "vercel-php",
-            "config": {
-                "memory": 512,
-                "maxDuration": 30
-            }
+            "use": "vercel-php"
         }
     ],
     "routes": [
