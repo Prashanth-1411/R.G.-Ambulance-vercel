@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('label');
             $table->string('link');
             $table->foreignId('parent_id')->nullable()->constrained('navigation_items')->onDelete('set null');
-            $table->enum('location', ['header', 'footer']);
+            $table->string('location')->check("location IN ('header', 'footer')");
             $table->integer('sort_order')->default(0);
             $table->boolean('status')->default(true);
             $table->timestamps();

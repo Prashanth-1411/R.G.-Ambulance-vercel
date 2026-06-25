@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('issuer')->nullable();
             $table->date('date_issued')->nullable();
             $table->string('image')->nullable();
-            $table->enum('type', ['certificate', 'award'])->default('certificate');
+            $table->string('type', 20)->default('certificate')->check("type IN ('certificate', 'award')");
             $table->integer('sort_order')->default(0);
             $table->boolean('status')->default(true);
             $table->timestamps();

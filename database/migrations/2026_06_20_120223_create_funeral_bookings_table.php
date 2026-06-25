@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('deceased_name')->nullable();
             $table->date('service_date')->nullable();
             $table->text('special_requests')->nullable();
-            $table->enum('status', ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled'])->default('pending');
+            $table->string('status', 20)->default('pending')->check("status IN ('pending', 'confirmed', 'in_progress', 'completed', 'cancelled')");
             $table->text('admin_notes')->nullable();
             $table->string('ip_address')->nullable();
             $table->softDeletes();

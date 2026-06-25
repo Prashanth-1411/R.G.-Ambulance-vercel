@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('icon')->nullable();
             $table->string('image')->nullable();
             $table->foreignId('category_id')->nullable()->constrained('service_categories')->onDelete('set null');
-            $table->enum('service_type', ['ambulance', 'funeral']);
+            $table->string('service_type')->check("service_type IN ('ambulance', 'funeral')");
             $table->boolean('is_featured')->default(false);
             $table->integer('sort_order')->default(0);
             $table->boolean('status')->default(true);

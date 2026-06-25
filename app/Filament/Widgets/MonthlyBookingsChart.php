@@ -17,13 +17,17 @@ class MonthlyBookingsChart extends BaseWidget
 
     public function table(Table $table): Table
     {
-        $ambulanceData = Booking::select(DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"), DB::raw('count(*) as total'))
+        $dateExpr = DB::getDriverName() === 'pgsql'
+            ? "TO_CHAR(created_at, 'YYYY-MM')"
+            : "DATE_FORMAT(created_at, '%Y-%m')";
+
+        $ambulanceData = Booking::select(DB::raw("$dateExpr as month"), DB::raw('count(*) as total'))
             ->groupBy('month')
             ->orderBy('month', 'desc')
             ->limit(12)
             ->get();
 
-        $funeralData = FuneralBooking::select(DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"), DB::raw('count(*) as total'))
+        $funeralData = FuneralBooking::select(DB::raw("$dateExpr as month"), DB::raw('count(*) as total'))
             ->groupBy('month')
             ->orderBy('month', 'desc')
             ->limit(12)

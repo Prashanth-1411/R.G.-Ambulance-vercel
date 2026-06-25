@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->string('icon')->nullable();
-            $table->enum('service_type', ['ambulance', 'funeral']);
+            $table->string('service_type')->check("service_type IN ('ambulance', 'funeral')");
             $table->integer('sort_order')->default(0);
             $table->boolean('status')->default(true);
             $table->timestamps();

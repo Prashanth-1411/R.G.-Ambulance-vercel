@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('subject')->nullable();
             $table->text('message');
             $table->boolean('is_read')->default(false);
-            $table->enum('status', ['unread', 'read', 'replied'])->default('unread');
+            $table->string('status', 20)->default('unread')->check("status IN ('unread', 'read', 'replied')");
             $table->string('ip_address')->nullable();
             $table->timestamps();
         });

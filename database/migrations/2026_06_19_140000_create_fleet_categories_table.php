@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('subtitle')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->enum('type', ['fleet', 'equipment', 'mortuary'])->default('fleet');
+            $table->string('type', 20)->default('fleet')->check("type IN ('fleet', 'equipment', 'mortuary')");
             $table->integer('sort_order')->default(0);
             $table->boolean('status')->default(true);
             $table->timestamps();

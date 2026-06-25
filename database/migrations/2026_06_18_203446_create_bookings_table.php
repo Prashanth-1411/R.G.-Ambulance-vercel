@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('service_name')->nullable();
             $table->date('booking_date')->nullable();
             $table->text('notes')->nullable();
-            $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
+            $table->string('status', 20)->default('pending')->check("status IN ('pending', 'confirmed', 'completed', 'cancelled')");
             $table->string('ip_address')->nullable();
             $table->timestamps();
         });
