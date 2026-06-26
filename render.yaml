@@ -1,8 +1,11 @@
 services:
   - type: web
     name: rg-ambulance
-    runtime: image
+    env: docker
     dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeploy: true
+    healthCheckPath: /up
     plan: free
     envVars:
       - key: APP_NAME
