@@ -61,7 +61,7 @@ services:
       - key: MAIL_USERNAME
         value: ebenezer.r@rgambulanceservice.com
       - key: MAIL_PASSWORD
-        sync: false
+        value: Prashanth@11321
       - key: MAIL_ENCRYPTION
         value: tls
       - key: MAIL_FROM_ADDRESS
