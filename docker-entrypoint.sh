@@ -41,6 +41,9 @@ if [ -n "$DB_HOST" ]; then
     # Seeding removed — run manually once via: php artisan db:seed
 fi
 
+# Ensure writable directories exist
+mkdir -p /var/www/html/storage/{app/{livewire-tmp,public},framework/{views,cache/data,sessions},logs} 2>/dev/null || true
+
 # Storage link
 php artisan storage:link --force 2>/dev/null || true
 
