@@ -38,10 +38,7 @@ if [ -n "$DB_HOST" ]; then
     done
     echo "Running migrations..."
     php artisan migrate --force
-    if [ ! -f /var/www/html/storage/.seeded ]; then
-        echo "Seeding database (first run only)..."
-        php artisan db:seed --force && touch /var/www/html/storage/.seeded || true
-    fi
+    # Seeding removed — run manually once via: php artisan db:seed
 fi
 
 # Storage link
@@ -53,5 +50,8 @@ if [ "$APP_ENV" = "production" ]; then
     php artisan route:cache || true
     php artisan view:cache || true
 fi
+
+# Fix permissions so Apache (www-data) can write to storage
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
 
 exec "$@"
