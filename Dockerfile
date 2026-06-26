@@ -10,6 +10,15 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpq-dev \
     libicu-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libwebp-dev \
+    jpegoptim \
+    optipng \
+    pngquant \
+    gifsicle \
+    webp \
+    libavif-bin \
     zip \
     unzip \
     nodejs \
@@ -18,7 +27,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # PHP extensions
-RUN docker-php-ext-install pdo_mysql pgsql pdo_pgsql mbstring exif pcntl bcmath gd zip intl
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp \
+    && docker-php-ext-install pdo_mysql pgsql pdo_pgsql mbstring exif pcntl bcmath gd zip intl
 
 # PHP.ini settings
 RUN echo "upload_max_filesize=64M" > /usr/local/etc/php/conf.d/uploads.ini \
@@ -41,7 +51,7 @@ COPY . .
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
 # Install and build frontend assets
-RUN npm install && npm run build
+RUN npm install -g svgo && npm install && npm run build
 
 # Configure Apache document root to public/
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
