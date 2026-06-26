@@ -46,6 +46,8 @@ services:
         value: database
       - key: CACHE_STORE
         value: database
+      - key: LOG_CHANNEL
+        value: stderr
       - key: QUEUE_CONNECTION
         value: sync
       - key: QUEUE_CONVERSIONS_BY_DEFAULT
