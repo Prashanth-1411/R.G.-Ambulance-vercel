@@ -18,7 +18,5 @@ Dockerfile
 docker-entrypoint.sh
 postcss.config.js
 tailwind.config.js
-vite.config.js
 *.md
 *.sql
-package-lock.json
