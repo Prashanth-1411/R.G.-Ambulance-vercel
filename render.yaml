@@ -1,0 +1,72 @@
+services:
+  - type: web
+    name: rg-ambulance
+    runtime: image
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: APP_NAME
+        value: RG Ambulance Service
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        value: https://rg-ambulance.onrender.com
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: rg-ambulance-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: rg-ambulance-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: rg-ambulance-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: rg-ambulance-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: rg-ambulance-db
+          property: password
+      - key: DB_SSLMODE
+        value: require
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: QUEUE_CONVERSIONS_BY_DEFAULT
+        value: false
+      - key: FILESYSTEM_DISK
+        value: local
+      - key: MAIL_MAILER
+        value: smtp
+      - key: MAIL_HOST
+        value: smtp.zoho.com
+      - key: MAIL_PORT
+        value: "587"
+      - key: MAIL_USERNAME
+        value: ebenezer.r@rgambulanceservice.com
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: MAIL_ENCRYPTION
+        value: tls
+      - key: MAIL_FROM_ADDRESS
+        value: ebenezer.r@rgambulanceservice.com
+      - key: MAIL_FROM_NAME
+        value: RG Ambulance Service
+
+databases:
+  - name: rg-ambulance-db
+    plan: free
+    databaseName: rg_ambulance
