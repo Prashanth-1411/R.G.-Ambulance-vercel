@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # PHP extensions
-RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip intl
+RUN docker-php-ext-install pdo_mysql pgsql pdo_pgsql mbstring exif pcntl bcmath gd zip intl
 
 # PHP.ini settings
 RUN echo "upload_max_filesize=64M" > /usr/local/etc/php/conf.d/uploads.ini \
