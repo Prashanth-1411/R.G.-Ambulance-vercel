@@ -25,10 +25,13 @@ class ServiceAreaSeeder extends Seeder
         ];
 
         foreach ($areas as $i => $area) {
-            ServiceArea::create(array_merge($area, [
-                'is_active' => true,
-                'sort_order' => $i + 1,
-            ]));
+            ServiceArea::firstOrCreate(
+                ['slug' => $area['slug']],
+                array_merge($area, [
+                    'is_active' => true,
+                    'sort_order' => $i + 1,
+                ])
+            );
         }
     }
 }

@@ -9,8 +9,6 @@ class ServiceSeeder extends Seeder
 {
     public function run(): void
     {
-        Service::query()->delete();
-
         $ambulanceCat = \App\Models\ServiceCategory::where('service_type', 'ambulance')->first();
         $funeralCat = \App\Models\ServiceCategory::where('service_type', 'funeral')->first();
 
@@ -78,7 +76,10 @@ class ServiceSeeder extends Seeder
         ];
 
         foreach ($services as $service) {
-            Service::create(array_merge($service, ['status' => true]));
+            Service::updateOrCreate(
+                ['slug' => $service['slug']],
+                array_merge($service, ['status' => true])
+            );
         }
     }
 }

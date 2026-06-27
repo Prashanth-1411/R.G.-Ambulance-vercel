@@ -3,19 +3,25 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Setting;
-use App\Models\Service;
+use App\Models\FuneralService;
 
 class FuneralServicesController extends Controller
 {
     public function index()
     {
-        $settings = Setting::find(1);
-        $services = Service::where('status', true)
-            ->where('service_type', 'funeral')
-            ->with('features')
+        $services = FuneralService::where('status', true)
             ->orderBy('sort_order')
             ->get();
-        return view('frontend.fleet', compact('settings', 'services'));
+
+        return view('frontend.funeral-services.index', compact('services'));
+    }
+
+    public function show(string $slug)
+    {
+        $service = FuneralService::where('slug', $slug)
+            ->where('status', true)
+            ->firstOrFail();
+
+        return view('frontend.funeral-services.show', compact('service'));
     }
 }

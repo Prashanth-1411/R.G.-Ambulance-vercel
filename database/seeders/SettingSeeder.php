@@ -9,7 +9,9 @@ class SettingSeeder extends Seeder
 {
     public function run(): void
     {
-        Setting::create([
+        Setting::firstOrCreate(
+            ['company_name' => 'R.G. Ambulance Service'],
+            [
             'company_name' => 'R.G. Ambulance Service',
             'tagline' => 'Your Trusted Emergency Medical Transport Service',
             'email' => 'info@rgambulanceservice.com',

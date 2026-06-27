@@ -18,11 +18,14 @@ class SeoMetaSeeder extends Seeder
         ];
 
         foreach ($pages as $page => [$title, $desc]) {
-            SeoMetum::create([
-                'page_name' => $page,
-                'meta_title' => $title,
-                'meta_description' => $desc,
-            ]);
+            SeoMetum::firstOrCreate(
+                ['page_name' => $page],
+                [
+                    'page_name' => $page,
+                    'meta_title' => $title,
+                    'meta_description' => $desc,
+                ]
+            );
         }
     }
 }

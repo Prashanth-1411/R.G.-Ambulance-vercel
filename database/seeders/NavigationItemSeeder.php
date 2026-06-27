@@ -27,11 +27,17 @@ class NavigationItemSeeder extends Seeder
         ];
 
         foreach ($headerItems as $item) {
-            NavigationItem::create($item + ['parent_id' => null, 'status' => true]);
+            NavigationItem::firstOrCreate(
+                ['label' => $item['label'], 'location' => 'header'],
+                $item + ['parent_id' => null, 'status' => true]
+            );
         }
 
         foreach ($footerItems as $item) {
-            NavigationItem::create($item + ['parent_id' => null, 'status' => true]);
+            NavigationItem::firstOrCreate(
+                ['label' => $item['label'], 'location' => 'footer'],
+                $item + ['parent_id' => null, 'status' => true]
+            );
         }
     }
 }

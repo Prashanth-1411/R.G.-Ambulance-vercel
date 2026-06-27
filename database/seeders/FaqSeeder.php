@@ -18,11 +18,14 @@ class FaqSeeder extends Seeder
         ];
 
         foreach ($faqs as $i => $faq) {
-            Faq::create(array_merge($faq, [
-                'category' => 'general',
-                'sort_order' => $i + 1,
-                'is_active' => true,
-            ]));
+            Faq::firstOrCreate(
+                ['question' => $faq['question']],
+                array_merge($faq, [
+                    'category' => 'general',
+                    'sort_order' => $i + 1,
+                    'is_active' => true,
+                ])
+            );
         }
     }
 }

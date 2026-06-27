@@ -65,26 +65,59 @@ trait HasImageBlobs
     protected function storeBlobs(): void
     {
         foreach ($this->imageBlobFields() as $field => [$blobCol, $mimeCol]) {
-            $path = $this->{$field};
+            try {
+                $path = $this->{$field};
 
-            if (empty($path)) {
-                continue;
-            }
+                if (empty($path)) {
+                    continue;
+                }
 
-            if (str_starts_with($path, 'data:')) {
-                continue;
-            }
+                if (str_starts_with($path, 'data:')) {
+                    continue;
+                }
 
-            if ($this->{$blobCol} && !$this->isDirty($field)) {
-                continue;
-            }
+                if (str_starts_with($path, 'http')) {
+                    continue;
+                }
 
-            $contents = $this->readFileContents($path);
-            if ($contents !== null) {
-                $this->{$blobCol} = base64_encode($contents);
-                $this->{$mimeCol} = $this->detectMimeType($path, $contents);
+                if (isset($this->{$blobCol}) && !$this->isDirty($field)) {
+                    continue;
+                }
+
+                $contents = $this->readFileContents($path);
+                if ($contents !== null) {
+                    $this->{$blobCol} = base64_encode($contents);
+                    $this->{$mimeCol} = $this->detectMimeType($path, $contents);
+                }
+            } catch (\Throwable $e) {
+                logger()->error('HasImageBlobs storeBlobs failed: ' . $e->getMessage(), [
+                    'model' => static::class,
+                    'field' => $field,
+                ]);
             }
         }
+    }
+
+    protected function getBlobUrl(string $field): ?string
+    {
+        try {
+            $fields = $this->imageBlobFields();
+            if (!isset($fields[$field])) {
+                return null;
+            }
+
+            [$blobCol, $mimeCol] = $fields[$field];
+            $blob = $this->{$blobCol} ?? null;
+            $mime = $this->{$mimeCol} ?? null;
+
+            if ($blob && $mime) {
+                return 'data:' . $mime . ';base64,' . $blob;
+            }
+        } catch (\Throwable $e) {
+            logger()->error('HasImageBlobs getBlobUrl failed: ' . $e->getMessage());
+        }
+
+        return null;
     }
 
     public function getImageUrl(string $field): ?string
@@ -94,21 +127,22 @@ trait HasImageBlobs
             return $this->{$field} ?? null;
         }
 
-        [$blobCol, $mimeCol] = $fields[$field];
-        $blob = $this->{$blobCol};
-        $mime = $this->{$mimeCol};
-
-        if ($blob && $mime) {
-            return 'data:' . $mime . ';base64,' . $blob;
+        $blobUrl = $this->getBlobUrl($field);
+        if ($blobUrl) {
+            return $blobUrl;
         }
 
-        $path = $this->{$field};
+        $path = $this->{$field} ?? null;
         if (!$path) {
             return null;
         }
 
         if (str_starts_with($path, 'http') || str_starts_with($path, 'data:')) {
             return $path;
+        }
+
+        if (str_starts_with($path, 'storage/')) {
+            return asset($path);
         }
 
         return asset('storage/' . $path);
