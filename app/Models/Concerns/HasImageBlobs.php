@@ -2,8 +2,11 @@
 
 namespace App\Models\Concerns;
 
+use Illuminate\Support\Facades\Schema;
+
 trait HasImageBlobs
 {
+    private static array $blobColumnCache = [];
     public static function bootHasImageBlobs(): void
     {
         static::saving(function ($model) {
@@ -64,8 +67,20 @@ trait HasImageBlobs
 
     protected function storeBlobs(): void
     {
+        $table = $this->getTable();
+        if (!isset(self::$blobColumnCache[$table])) {
+            self::$blobColumnCache[$table] = [];
+            foreach ($this->imageBlobFields() as $field => [$blobCol, $mimeCol]) {
+                self::$blobColumnCache[$table][$field] = Schema::hasColumn($table, $blobCol);
+            }
+        }
+
         foreach ($this->imageBlobFields() as $field => [$blobCol, $mimeCol]) {
             try {
+                if (!self::$blobColumnCache[$table][$field] ?? false) {
+                    continue;
+                }
+
                 $path = $this->{$field};
 
                 if (empty($path)) {
