@@ -2,12 +2,13 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 const isVercel = process.env.VERCEL === '1';
+const isRender = process.env.RENDER === '1';
 
 export default defineConfig({
-  base: isVercel ? '/' : '/R.G.-Ambulance-master/public/frontend/',
+  base: (isVercel || isRender) ? '/' : '/R.G.-Ambulance-master/public/frontend/',
   plugins: [react()],
   build: {
-    outDir: isVercel ? 'dist' : '../public/frontend',
+    outDir: (isVercel || isRender) ? 'dist' : '../public/frontend',
     emptyOutDir: true,
   },
   server: {
