@@ -25,4 +25,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// React SPA fallback for ambulance location pages (not served by Blade)
+Route::get('/ambulance-services', function () {
+    $file = public_path('frontend/index.html');
+    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
+});
+
+Route::get('/funeral-services', function () {
+    $file = public_path('frontend/index.html');
+    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
+});
+
+Route::get('/ambulance-service-in-{slug}', function ($slug) {
+    $file = public_path('frontend/index.html');
+    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
+})->where('slug', '.*');
+
 require __DIR__.'/auth.php';
