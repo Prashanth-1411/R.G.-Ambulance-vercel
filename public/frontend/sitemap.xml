@@ -2,49 +2,49 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Core Pages -->
   <url>
-    <loc>http://localhost:5173/</loc>
+    <loc>https://www.rgambulanceservice.com/</loc>
     <priority>1.0</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>http://localhost:5173/ambulance-services</loc>
+    <loc>https://www.rgambulanceservice.com/ambulance-services</loc>
     <priority>0.9</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>http://localhost:5173/funeral-services</loc>
+    <loc>https://www.rgambulanceservice.com/funeral-services</loc>
     <priority>0.9</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>http://localhost:5173/testimonials</loc>
+    <loc>https://www.rgambulanceservice.com/testimonials</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>http://localhost:5173/blog</loc>
+    <loc>https://www.rgambulanceservice.com/blog</loc>
     <priority>0.8</priority>
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>http://localhost:5173/contact</loc>
+    <loc>https://www.rgambulanceservice.com/contact</loc>
     <priority>0.8</priority>
     <changefreq>monthly</changefreq>
   </url>
 
   <!-- Example Top Localities Standby Bays -->
   <url>
-    <loc>http://localhost:5173/ambulance-service-in-anna-nagar</loc>
+    <loc>https://www.rgambulanceservice.com/ambulance-service-in-anna-nagar</loc>
     <priority>0.7</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>http://localhost:5173/ambulance-service-in-adyar</loc>
+    <loc>https://www.rgambulanceservice.com/ambulance-service-in-adyar</loc>
     <priority>0.7</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>http://localhost:5173/ambulance-service-in-velachery</loc>
+    <loc>https://www.rgambulanceservice.com/ambulance-service-in-velachery</loc>
     <priority>0.7</priority>
     <changefreq>monthly</changefreq>
   </url>
