@@ -73,14 +73,32 @@ export const LocationPage: React.FC = () => {
 
   useEffect(() => {
     if (locationData) {
-      document.title = locationData.meta_title || `Ambulance Service in ${locationData.name} | R.G. Ambulance Service`;
-      let metaDesc = document.querySelector('meta[name="description"]');
-      if (!metaDesc) {
-        metaDesc = document.createElement('meta');
-        metaDesc.setAttribute('name', 'description');
-        document.head.appendChild(metaDesc);
-      }
-      metaDesc.setAttribute('content', locationData.meta_description || `Emergency ICU and Ventilator ambulance services in ${locationData.name}.`);
+      const title = locationData.meta_title || `Ambulance Service in ${locationData.name} | R.G. Ambulance Service`;
+      const desc = locationData.meta_description || `Emergency ICU and Ventilator ambulance services in ${locationData.name}. Call +91 95516 63530.`;
+      const url = `https://www.rgambulanceservice.com/ambulance-service-in-${locationData.name.toLowerCase().replace(/\s+/g, '-')}`;
+
+      document.title = title;
+
+      const setMeta = (selector: string, property: string, content: string) => {
+        let el = document.querySelector(selector);
+        if (!el) {
+          el = document.createElement('meta');
+          if (property.startsWith('og:') || property.startsWith('twitter:')) {
+            el.setAttribute(property.startsWith('og:') ? 'property' : 'name', property);
+          } else {
+            el.setAttribute('name', property);
+          }
+          document.head.appendChild(el);
+        }
+        el.setAttribute('content', content);
+      };
+
+      setMeta('meta[name="description"]', 'description', desc);
+      setMeta('meta[property="og:title"]', 'og:title', title);
+      setMeta('meta[property="og:description"]', 'og:description', desc);
+      setMeta('meta[property="og:url"]', 'og:url', url);
+      setMeta('meta[name="twitter:title"]', 'twitter:title', title);
+      setMeta('meta[name="twitter:description"]', 'twitter:description', desc);
     }
   }, [locationData]);
 

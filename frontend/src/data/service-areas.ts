@@ -2475,4 +2475,27 @@ export const serviceAreas: ServiceArea[] = [
     meta_keywords: 'ambulance ra puram, emergency service ra puram, chennai upscale area ambulance',
     is_active: true,
   },
+  {
+    id: 111,
+    name: 'Surapet',
+    slug: 'ambulance-service-in-surapet',
+    description: '24/7 emergency ambulance service in Surapet, Chennai. Rapid response with ICU, BLS, and cardiac care vehicles.',
+    content_html: `<h2>Ambulance Service in Surapet, Chennai</h2>
+<p>Surapet is a developing residential locality in North Chennai, close to Ambattur and Red Hills. R.G. Ambulance Service maintains a dedicated ambulance standby bay to ensure rapid emergency response across this area and its surrounding neighborhoods.</p>
+<h3>Coverage Areas</h3>
+<ul>
+<li>Surapet Main Road</li>
+<li>Surapet Colony</li>
+<li>Surrounding neighborhoods</li>
+</ul>
+<h3>Service Features</h3>
+<p>Our Surapet bay is equipped with BLS, ALS, cardiac care, and patient transport ambulances staffed by experienced paramedics.</p>`,
+    faqs: [
+      { question: 'What is the response time in Surapet?', answer: 'Our Surapet standby bay provides a response time of 10-15 minutes across the locality.' },
+    ],
+    meta_title: 'Ambulance Service in Surapet, Chennai | R.G. Ambulance Service',
+    meta_description: '24/7 emergency ambulance service in Surapet Chennai. ICU, BLS, and cardiac ambulances available. Call +91 95516 63530.',
+    meta_keywords: 'ambulance surapet, emergency service surapet, north chennai ambulance',
+    is_active: true,
+  },
 ];
