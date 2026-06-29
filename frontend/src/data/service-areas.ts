@@ -593,23 +593,26 @@ export const serviceAreas: ServiceArea[] = [
     id: 29,
     name: 'Red Hills',
     slug: 'ambulance-service-in-red-hills',
-    description: '24/7 emergency ambulance service in Red Hills, Chennai. Rapid response with ICU, BLS, and cardiac care vehicles.',
-    content_html: `<h2>Ambulance Service in Red Hills, Chennai</h2>
-<p>Red Hills is a suburb in North Chennai, known for the Red Hills Lake and the Chennai water supply reservoir. R.G. Ambulance Service maintains a dedicated ambulance standby bay to ensure rapid emergency response across this area.</p>
+    description: 'Red Hills local ambulance service – 24/7 emergency ICU, BLS, and cardiac care in Red Hills, Chennai. Rapid response standby bay.',
+    content_html: `<h2>Red Hills Local Ambulance Service, Chennai</h2>
+<p>Red Hills is a suburb in North Chennai, known for the Red Hills Lake and the Chennai water supply reservoir. R.G. Ambulance Service maintains a dedicated Red Hills local ambulance standby bay to ensure rapid emergency response across this area.</p>
 <h3>Coverage Areas</h3>
 <ul>
 <li>Red Hills Main Road</li>
 <li>Red Hills Colony</li>
-<li>Surrounding neighborhoods</li>
+<li>Puzhal</li>
+<li>Surapet</li>
+<li>Moolakadai</li>
+<li>Kallikuppam</li>
 </ul>
 <h3>Service Features</h3>
-<p>Our Red Hills bay is equipped with BLS, ALS, cardiac care, and patient transport ambulances staffed by experienced paramedics.</p>`,
+<p>Our Red Hills local ambulance bay is equipped with BLS, ALS, cardiac care, and patient transport ambulances staffed by experienced paramedics.</p>`,
     faqs: [
-      { question: 'What is the response time in Red Hills?', answer: 'Our Red Hills standby bay provides a response time of 10-15 minutes across the locality.' },
+      { question: 'How fast is the local ambulance service in Red Hills?', answer: 'Our Red Hills local ambulance standby bay provides a response time of 10-15 minutes across the locality.' },
     ],
-    meta_title: 'Ambulance Service in Red Hills, Chennai | R.G. Ambulance Service',
-    meta_description: '24/7 emergency ambulance service in Red Hills Chennai. ICU, BLS, and cardiac ambulances available. Call +91 95516 63530.',
-    meta_keywords: 'ambulance red hills, emergency service red hills, north chennai ambulance',
+    meta_title: 'Red Hills Local Ambulance Service – 24/7 Emergency in Chennai | R.G. Ambulance',
+    meta_description: 'Red Hills local ambulance service – 24/7 emergency ICU, BLS, and cardiac ambulances in Red Hills Chennai. Call +91 95516 63530 for immediate dispatch.',
+    meta_keywords: 'red hills local ambulance service, ambulance in red hills, red hills emergency ambulance, local ambulance red hills chennai, north chennai ambulance service',
     is_active: true,
   },
   {
@@ -1536,23 +1539,26 @@ export const serviceAreas: ServiceArea[] = [
     id: 70,
     name: 'Ambattur',
     slug: 'ambulance-service-in-ambattur',
-    description: '24/7 emergency ambulance service in Ambattur, Chennai. Rapid response with ICU, BLS, and cardiac care vehicles.',
-    content_html: `<h2>Ambulance Service in Ambattur, Chennai</h2>
-<p>Ambattur is a major industrial and residential suburb in West Chennai, known for the Ambattur Industrial Estate and OT area. R.G. Ambulance Service maintains a dedicated ambulance standby bay to ensure rapid emergency response across this large area.</p>
+    description: 'Ambattur local ambulance service – 24/7 emergency ICU, BLS, and cardiac care in Ambattur, Chennai. Rapid response standby bay.',
+    content_html: `<h2>Ambattur Local Ambulance Service, Chennai</h2>
+<p>Ambattur is a major industrial and residential suburb in West Chennai, known for the Ambattur Industrial Estate and OT area. R.G. Ambulance Service maintains a dedicated Ambattur local ambulance standby bay to ensure rapid emergency response across this large area.</p>
 <h3>Coverage Areas</h3>
 <ul>
 <li>Ambattur Main Road</li>
 <li>Ambattur Colony</li>
-<li>Surrounding neighborhoods</li>
+<li>Ambattur OT</li>
+<li>Surapet</li>
+<li>Mogappair</li>
+<li>Vanagaram</li>
 </ul>
 <h3>Service Features</h3>
-<p>Our Ambattur bay is equipped with BLS, ALS, cardiac care, and patient transport ambulances staffed by experienced paramedics.</p>`,
+<p>Our Ambattur local ambulance bay is equipped with BLS, ALS, cardiac care, and patient transport ambulances staffed by experienced paramedics.</p>`,
     faqs: [
-      { question: 'What is the response time in Ambattur?', answer: 'Our Ambattur standby bay provides a response time of 10-15 minutes across the locality.' },
+      { question: 'How fast is the local ambulance service in Ambattur?', answer: 'Our Ambattur local ambulance standby bay provides a response time of 10-15 minutes across the locality.' },
     ],
-    meta_title: 'Ambulance Service in Ambattur, Chennai | R.G. Ambulance Service',
-    meta_description: '24/7 emergency ambulance service in Ambattur Chennai. ICU, BLS, and cardiac ambulances available. Call +91 95516 63530.',
-    meta_keywords: 'ambulance ambattur, emergency service ambattur, west chennai industrial estate ambulance',
+    meta_title: 'Ambattur Local Ambulance Service – 24/7 Emergency in Chennai | R.G. Ambulance',
+    meta_description: 'Ambattur local ambulance service – 24/7 emergency ICU, BLS, and cardiac ambulances in Ambattur Chennai. Call +91 95516 63530 for immediate dispatch.',
+    meta_keywords: 'ambattur local ambulance service, ambulance in ambattur, ambattur emergency ambulance, local ambulance ambattur chennai, west chennai ambulance service',
     is_active: true,
   },
   {
@@ -2479,23 +2485,26 @@ export const serviceAreas: ServiceArea[] = [
     id: 111,
     name: 'Surapet',
     slug: 'ambulance-service-in-surapet',
-    description: '24/7 emergency ambulance service in Surapet, Chennai. Rapid response with ICU, BLS, and cardiac care vehicles.',
-    content_html: `<h2>Ambulance Service in Surapet, Chennai</h2>
-<p>Surapet is a developing residential locality in North Chennai, close to Ambattur and Red Hills. R.G. Ambulance Service maintains a dedicated ambulance standby bay to ensure rapid emergency response across this area and its surrounding neighborhoods.</p>
+    description: 'Surapet local ambulance service – 24/7 emergency ICU, BLS, and cardiac care in Surapet, Chennai. Rapid response standby bay.',
+    content_html: `<h2>Surapet Local Ambulance Service, Chennai</h2>
+<p>Surapet is a developing residential locality in North Chennai, close to Ambattur and Red Hills. R.G. Ambulance Service maintains a dedicated Surapet local ambulance standby bay to ensure rapid emergency response across this area and its surrounding neighborhoods.</p>
 <h3>Coverage Areas</h3>
 <ul>
 <li>Surapet Main Road</li>
 <li>Surapet Colony</li>
-<li>Surrounding neighborhoods</li>
+<li>Ambattur</li>
+<li>Red Hills</li>
+<li>Mogappair</li>
+<li>Puzhal</li>
 </ul>
 <h3>Service Features</h3>
-<p>Our Surapet bay is equipped with BLS, ALS, cardiac care, and patient transport ambulances staffed by experienced paramedics.</p>`,
+<p>Our Surapet local ambulance bay is equipped with BLS, ALS, cardiac care, and patient transport ambulances staffed by experienced paramedics.</p>`,
     faqs: [
-      { question: 'What is the response time in Surapet?', answer: 'Our Surapet standby bay provides a response time of 10-15 minutes across the locality.' },
+      { question: 'How fast is the local ambulance service in Surapet?', answer: 'Our Surapet local ambulance standby bay provides a response time of 10-15 minutes across the locality.' },
     ],
-    meta_title: 'Ambulance Service in Surapet, Chennai | R.G. Ambulance Service',
-    meta_description: '24/7 emergency ambulance service in Surapet Chennai. ICU, BLS, and cardiac ambulances available. Call +91 95516 63530.',
-    meta_keywords: 'ambulance surapet, emergency service surapet, north chennai ambulance',
+    meta_title: 'Surapet Local Ambulance Service – 24/7 Emergency in Chennai | R.G. Ambulance',
+    meta_description: 'Surapet local ambulance service – 24/7 emergency ICU, BLS, and cardiac ambulances in Surapet Chennai. Call +91 95516 63530 for immediate dispatch.',
+    meta_keywords: 'surapet local ambulance service, ambulance in surapet, surapet emergency ambulance, local ambulance surapet chennai, north chennai ambulance service',
     is_active: true,
   },
 ];
