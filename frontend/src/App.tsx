@@ -51,6 +51,9 @@ export const App: React.FC = () => {
             <Route path="/ambulance-service-in-:locationSlug" element={<LocationPage />} />
             <Route path="/local-ambulance-in-:locationSlug" element={<LocationPage />} />
             <Route path="/ambulance-near-:locationSlug" element={<LocationPage />} />
+            <Route path="/:locationSlug/local-ambulance" element={<LocationPage />} />
+            <Route path="/:locationSlug/ambulance-service" element={<LocationPage />} />
+            <Route path="/:locationSlug/ambulance-nearby" element={<LocationPage />} />
           </Route>
         </Routes>
       </NavigationProvider>
