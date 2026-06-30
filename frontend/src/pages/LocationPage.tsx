@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MapPin, Phone, MessageSquare, ChevronDown, Calendar, AlertCircle,
@@ -33,6 +33,7 @@ const FloatingShape: React.FC<{ className?: string; delay?: number }> = ({ class
 export const LocationPage: React.FC = () => {
   const { locationSlug } = useParams<{ locationSlug: string }>();
   const navigate = useNavigate();
+  const pathname = useLocation().pathname;
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   const [bookingForm, setBookingForm] = useState({
@@ -42,9 +43,23 @@ export const LocationPage: React.FC = () => {
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
-  const fullSlug = locationSlug?.startsWith('ambulance-service-in-')
-    ? locationSlug
-    : `ambulance-service-in-${locationSlug}`;
+  const pageType = useMemo(() => {
+    if (pathname.startsWith('/local-ambulance-in-')) return 'local';
+    if (pathname.startsWith('/ambulance-near-')) return 'near';
+    return 'service';
+  }, [pathname]);
+
+  const areaSlug = useMemo(() => {
+    if (pathname.startsWith('/local-ambulance-in-')) {
+      return pathname.replace('/local-ambulance-in-', '');
+    }
+    if (pathname.startsWith('/ambulance-near-')) {
+      return pathname.replace('/ambulance-near-', '');
+    }
+    return pathname.replace('/ambulance-service-in-', '');
+  }, [pathname]);
+
+  const fullSlug = `ambulance-service-in-${areaSlug}`;
 
   const [locationData, setLocationData] = useState<typeof serviceAreas[number] | null>(null);
 
@@ -71,11 +86,29 @@ export const LocationPage: React.FC = () => {
     });
   }, [fullSlug]);
 
+  const headingPrefix = useMemo(() => {
+    switch (pageType) {
+      case 'local': return 'Local Ambulance in';
+      case 'near': return 'Ambulance Near';
+      default: return 'Ambulance Service in';
+    }
+  }, [pageType]);
+
   useEffect(() => {
     if (locationData) {
-      const title = locationData.meta_title || `Ambulance Service in ${locationData.name} | R.G. Ambulance Service`;
-      const desc = locationData.meta_description || `Emergency ICU and Ventilator ambulance services in ${locationData.name}. Call +91 95516 63530.`;
-      const url = `https://www.rgambulanceservice.com/ambulance-service-in-${locationData.name.toLowerCase().replace(/\s+/g, '-')}`;
+      const title = pageType === 'local'
+        ? `Local Ambulance in ${locationData.name} | R.G. Ambulance Service`
+        : pageType === 'near'
+        ? `Ambulance Near ${locationData.name} | R.G. Ambulance Service`
+        : locationData.meta_title || `Ambulance Service in ${locationData.name} | R.G. Ambulance Service`;
+
+      const desc = pageType === 'local'
+        ? `Local ambulance service in ${locationData.name} – 24/7 emergency ICU, BLS, and cardiac care. Call +91 95516 63530.`
+        : pageType === 'near'
+        ? `Ambulance near ${locationData.name} – 24/7 emergency ICU, BLS, and cardiac ambulance services. Call +91 95516 63530.`
+        : locationData.meta_description || `Emergency ICU and Ventilator ambulance services in ${locationData.name}. Call +91 95516 63530.`;
+
+      const url = `https://www.rgambulanceservice.com/${pathname.startsWith('/') ? pathname.slice(1) : pathname}`;
 
       document.title = title;
 
@@ -99,6 +132,10 @@ export const LocationPage: React.FC = () => {
       setMeta('meta[property="og:url"]', 'og:url', url);
       setMeta('meta[name="twitter:title"]', 'twitter:title', title);
       setMeta('meta[name="twitter:description"]', 'twitter:description', desc);
+      // Also set a meta tag to help identify page type for styling
+      let ptEl = document.querySelector('meta[name="page-type"]');
+      if (!ptEl) { ptEl = document.createElement('meta'); ptEl.setAttribute('name', 'page-type'); document.head.appendChild(ptEl); }
+      ptEl.setAttribute('content', pageType);
     }
   }, [locationData]);
 
@@ -190,7 +227,7 @@ export const LocationPage: React.FC = () => {
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white font-display leading-[1.05] tracking-tight">
-                Ambulance Service in{' '}
+                {headingPrefix}{' '}
                 <span className="text-gradient">{locationData.name}</span>
               </h1>
 
@@ -239,7 +276,7 @@ export const LocationPage: React.FC = () => {
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-navy-800 font-display">
-                        Emergency Services in {locationData.name}
+                        {headingPrefix} {locationData.name}
                       </h2>
                       <p className="text-xs text-navy-400 font-body">Comprehensive medical transport coverage</p>
                     </div>
@@ -472,7 +509,7 @@ export const LocationPage: React.FC = () => {
             <AnimatedSection direction="left">
               <div className="space-y-4 text-center lg:text-left">
                 <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white font-display tracking-tight leading-tight">
-                  Need an Ambulance in {locationData.name}?
+                  Need an {pageType === 'near' ? 'Ambulance Near' : pageType === 'local' ? 'Local Ambulance in' : 'Ambulance in'} {locationData.name}?
                 </h3>
                 <p className="text-base text-navy-300 max-w-xl font-body">
                   Our dispatch team is ready. Call our hotline for immediate deployment of a fully equipped ICU ambulance to your location.
