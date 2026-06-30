@@ -44,6 +44,8 @@ export const LocationPage: React.FC = () => {
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
   const pageType = useMemo(() => {
+    if (pathname.startsWith('/rg-ambulance-service-')) return 'rg-service';
+    if (pathname.startsWith('/rg-ambulance-')) return 'rg';
     if (pathname.startsWith('/local-ambulance-in-')) return 'local';
     if (pathname.startsWith('/ambulance-near-')) return 'near';
     if (pathname.endsWith('/local-ambulance')) return 'area-local';
@@ -53,6 +55,12 @@ export const LocationPage: React.FC = () => {
   }, [pathname]);
 
   const areaSlug = useMemo(() => {
+    if (pathname.startsWith('/rg-ambulance-service-')) {
+      return pathname.replace('/rg-ambulance-service-', '');
+    }
+    if (pathname.startsWith('/rg-ambulance-')) {
+      return pathname.replace('/rg-ambulance-', '');
+    }
     if (pathname.startsWith('/local-ambulance-in-')) {
       return pathname.replace('/local-ambulance-in-', '');
     }
@@ -100,6 +108,7 @@ export const LocationPage: React.FC = () => {
 
   const isLocal = useMemo(() => pageType === 'local' || pageType === 'area-local', [pageType]);
   const isNear = useMemo(() => pageType === 'near' || pageType === 'area-nearby', [pageType]);
+  const isRg = useMemo(() => pageType === 'rg' || pageType === 'rg-service', [pageType]);
 
   const headingPrefix = useMemo(() => {
     switch (pageType) {
@@ -108,6 +117,8 @@ export const LocationPage: React.FC = () => {
       case 'area-local': return 'Local Ambulance in';
       case 'area-service': return 'Ambulance Service in';
       case 'area-nearby': return 'Ambulance Near';
+      case 'rg': return 'R.G. Ambulance in';
+      case 'rg-service': return 'R.G. Ambulance Service in';
       default: return 'Ambulance Service in';
     }
   }, [pageType]);
@@ -118,12 +129,16 @@ export const LocationPage: React.FC = () => {
         ? `Local Ambulance in ${locationData.name} | R.G. Ambulance Service`
         : isNear
         ? `Ambulance Near ${locationData.name} | R.G. Ambulance Service`
+        : isRg
+        ? `R.G. Ambulance Service in ${locationData.name} – 24/7 Emergency Ambulance`
         : locationData.meta_title || `Ambulance Service in ${locationData.name} | R.G. Ambulance Service`;
 
       const desc = isLocal
         ? `Local ambulance service in ${locationData.name} – 24/7 emergency ICU, BLS, and cardiac care. Call +91 95516 63530.`
         : isNear
         ? `Ambulance near ${locationData.name} – 24/7 emergency ICU, BLS, and cardiac ambulance services. Call +91 95516 63530.`
+        : isRg
+        ? `R.G. Ambulance Service in ${locationData.name} – 24/7 ICU, BLS, ALS emergency ambulance. Call +91 95516 63530.`
         : locationData.meta_description || `Emergency ICU and Ventilator ambulance services in ${locationData.name}. Call +91 95516 63530.`;
 
       const url = `https://www.rgambulanceservice.com/${pathname.startsWith('/') ? pathname.slice(1) : pathname}`;
@@ -562,7 +577,7 @@ export const LocationPage: React.FC = () => {
             <AnimatedSection direction="left">
               <div className="space-y-4 text-center lg:text-left">
                 <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white font-display tracking-tight leading-tight">
-                  Need an {isNear ? 'Ambulance Near' : isLocal ? 'Local Ambulance in' : 'Ambulance in'} {locationData.name}?
+                  Need an {isNear ? 'Ambulance Near' : isLocal ? 'Local Ambulance in' : isRg ? 'R.G. Ambulance in' : 'Ambulance in'} {locationData.name}?
                 </h3>
                 <p className="text-base text-navy-300 max-w-xl font-body">
                   Our dispatch team is ready. Call our hotline for immediate deployment of a fully equipped ICU ambulance to your location.

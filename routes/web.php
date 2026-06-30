@@ -66,4 +66,14 @@ Route::get('/{slug}/ambulance-nearby', function ($slug) {
     return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
 })->where('slug', '.*');
 
+Route::get('/rg-ambulance-service-{slug}', function ($slug) {
+    $file = public_path('frontend/index.html');
+    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
+})->where('slug', '.*');
+
+Route::get('/rg-ambulance-{slug}', function ($slug) {
+    $file = public_path('frontend/index.html');
+    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
+})->where('slug', '.*');
+
 require __DIR__.'/auth.php';
