@@ -150,10 +150,45 @@ export const LocationPage: React.FC = () => {
       setMeta('meta[property="og:url"]', 'og:url', url);
       setMeta('meta[name="twitter:title"]', 'twitter:title', title);
       setMeta('meta[name="twitter:description"]', 'twitter:description', desc);
-      // Also set a meta tag to help identify page type for styling
-      let ptEl = document.querySelector('meta[name="page-type"]');
-      if (!ptEl) { ptEl = document.createElement('meta'); ptEl.setAttribute('name', 'page-type'); document.head.appendChild(ptEl); }
-      ptEl.setAttribute('content', pageType);
+      // JSON-LD LocalBusiness structured data for Google local search
+      let ldEl = document.querySelector('#ld-localbusiness');
+      if (!ldEl) {
+        ldEl = document.createElement('script');
+        ldEl.setAttribute('id', 'ld-localbusiness');
+        ldEl.setAttribute('type', 'application/ld+json');
+        document.head.appendChild(ldEl);
+      }
+      ldEl.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'EmergencyService',
+        name: `R.G. Ambulance Service - ${locationData.name}`,
+        description: desc,
+        url: url,
+        telephone: '+919551663530',
+        areaServed: {
+          '@type': 'City',
+          name: locationData.name,
+          addressLocality: locationData.name,
+          addressRegion: 'Tamil Nadu',
+          addressCountry: 'IN'
+        },
+        hasOfferCatalog: {
+          '@type': 'OfferCatalog',
+          name: 'Ambulance Services',
+          itemListElement: [
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'ICU Ambulance' } },
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'BLS Ambulance' } },
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'ALS Ambulance' } },
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Cardiac Care Ambulance' } },
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Patient Transport' } }
+          ]
+        },
+        openingHours: 'Mo-Su 00:00-23:59',
+        availableChannel: [
+          { '@type': 'ServiceChannel', servicePhone: { '@type': 'ContactPoint', telephone: '+919551663530' } },
+          { '@type': 'ServiceChannel', serviceUrl: 'https://wa.me/918778481556' }
+        ]
+      });
     }
   }, [locationData]);
 
