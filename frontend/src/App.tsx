@@ -56,6 +56,19 @@ export const App: React.FC = () => {
             <Route path="/:locationSlug/ambulance-nearby" element={<LocationPage />} />
             <Route path="/rg-ambulance-service-:locationSlug" element={<LocationPage />} />
             <Route path="/rg-ambulance-:locationSlug" element={<LocationPage />} />
+            <Route path="/:slug-local-ambulance-service" element={<LocationPage />} />
+            <Route path="/:slug-local-ambulance" element={<LocationPage />} />
+            <Route path="/:slug-emergency-ambulance" element={<LocationPage />} />
+            <Route path="/:slug-ambulance-service-nearby" element={<LocationPage />} />
+            <Route path="/:slug-icu-ambulance" element={<LocationPage />} />
+            <Route path="/:slug-patient-transport" element={<LocationPage />} />
+            <Route path="/:slug-funeral-service" element={<LocationPage />} />
+            <Route path="/:slug-death-ambulance" element={<LocationPage />} />
+            <Route path="/:slug-mortuary-van" element={<LocationPage />} />
+            <Route path="/:slug-24-hour-ambulance" element={<LocationPage />} />
+            <Route path="/:slug-bed-ambulance" element={<LocationPage />} />
+            <Route path="/:slug-ventilator-ambulance" element={<LocationPage />} />
+            <Route path="/:slug-oxygen-ambulance" element={<LocationPage />} />
           </Route>
         </Routes>
       </NavigationProvider>

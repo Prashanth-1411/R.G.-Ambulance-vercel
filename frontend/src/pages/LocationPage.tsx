@@ -43,40 +43,57 @@ export const LocationPage: React.FC = () => {
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
+  const suffixPatterns = [
+    { suffix: '/rg-ambulance-service-', pageType: 'rg-service', strip: 'rg-ambulance-service-' },
+    { suffix: '/rg-ambulance-', pageType: 'rg', strip: 'rg-ambulance-' },
+    { suffix: '/local-ambulance-in-', pageType: 'local', strip: 'local-ambulance-in-' },
+    { suffix: '/ambulance-near-', pageType: 'near', strip: 'ambulance-near-' },
+    { suffix: '-local-ambulance-service', pageType: 'flat-local-service' },
+    { suffix: '-local-ambulance', pageType: 'flat-local' },
+    { suffix: '-emergency-ambulance', pageType: 'flat-emergency' },
+    { suffix: '-ambulance-service-nearby', pageType: 'flat-service-nearby' },
+    { suffix: '-icu-ambulance', pageType: 'flat-icu' },
+    { suffix: '-patient-transport', pageType: 'flat-patient-transport' },
+    { suffix: '-funeral-service', pageType: 'flat-funeral' },
+    { suffix: '-death-ambulance', pageType: 'flat-death' },
+    { suffix: '-mortuary-van', pageType: 'flat-mortuary' },
+    { suffix: '-24-hour-ambulance', pageType: 'flat-24hour' },
+    { suffix: '-bed-ambulance', pageType: 'flat-bed' },
+    { suffix: '-ventilator-ambulance', pageType: 'flat-ventilator' },
+    { suffix: '-oxygen-ambulance', pageType: 'flat-oxygen' },
+    { suffix: '/local-ambulance', pageType: 'area-local' },
+    { suffix: '/ambulance-service', pageType: 'area-service' },
+    { suffix: '/ambulance-nearby', pageType: 'area-nearby' },
+  ];
+
   const pageType = useMemo(() => {
-    if (pathname.startsWith('/rg-ambulance-service-')) return 'rg-service';
-    if (pathname.startsWith('/rg-ambulance-')) return 'rg';
-    if (pathname.startsWith('/local-ambulance-in-')) return 'local';
-    if (pathname.startsWith('/ambulance-near-')) return 'near';
-    if (pathname.endsWith('/local-ambulance')) return 'area-local';
-    if (pathname.endsWith('/ambulance-service')) return 'area-service';
-    if (pathname.endsWith('/ambulance-nearby')) return 'area-nearby';
+    for (const p of suffixPatterns) {
+      const check = p.suffix.startsWith('/') || p.suffix.startsWith('-') ? pathname : pathname;
+      if (p.suffix.startsWith('/') && pathname.startsWith(p.suffix)) return p.pageType;
+      if (p.suffix.startsWith('-') && pathname.endsWith(p.suffix)) return p.pageType;
+    }
+    if (pathname.startsWith('/ambulance-service-in-')) return 'service';
     return 'service';
   }, [pathname]);
 
   const areaSlug = useMemo(() => {
-    if (pathname.startsWith('/rg-ambulance-service-')) {
-      return pathname.replace('/rg-ambulance-service-', '');
+    for (const p of suffixPatterns) {
+      if (p.suffix.startsWith('/')) {
+        if (pathname.startsWith(p.suffix)) {
+          return pathname.replace(p.suffix, '');
+        }
+      }
+      if (p.suffix.startsWith('-')) {
+        if (pathname.endsWith(p.suffix)) {
+          const idx = pathname.lastIndexOf(p.suffix);
+          return pathname.substring(1, idx);
+        }
+      }
     }
-    if (pathname.startsWith('/rg-ambulance-')) {
-      return pathname.replace('/rg-ambulance-', '');
+    if (pathname.startsWith('/ambulance-service-in-')) {
+      return pathname.replace('/ambulance-service-in-', '');
     }
-    if (pathname.startsWith('/local-ambulance-in-')) {
-      return pathname.replace('/local-ambulance-in-', '');
-    }
-    if (pathname.startsWith('/ambulance-near-')) {
-      return pathname.replace('/ambulance-near-', '');
-    }
-    if (pathname.endsWith('/local-ambulance')) {
-      return pathname.replace('/local-ambulance', '').replace(/^\//, '');
-    }
-    if (pathname.endsWith('/ambulance-service')) {
-      return pathname.replace('/ambulance-service', '').replace(/^\//, '');
-    }
-    if (pathname.endsWith('/ambulance-nearby')) {
-      return pathname.replace('/ambulance-nearby', '').replace(/^\//, '');
-    }
-    return pathname.replace('/ambulance-service-in-', '');
+    return pathname.replace('/', '');
   }, [pathname]);
 
   const fullSlug = `ambulance-service-in-${areaSlug}`;
@@ -106,11 +123,31 @@ export const LocationPage: React.FC = () => {
     });
   }, [fullSlug]);
 
-  const isLocal = useMemo(() => pageType === 'local' || pageType === 'area-local', [pageType]);
-  const isNear = useMemo(() => pageType === 'near' || pageType === 'area-nearby', [pageType]);
-  const isRg = useMemo(() => pageType === 'rg' || pageType === 'rg-service', [pageType]);
+  const isLocal = useMemo(() =>
+    ['local', 'area-local', 'flat-local', 'flat-local-service'].includes(pageType), [pageType]);
+  const isNear = useMemo(() =>
+    ['near', 'area-nearby', 'flat-service-nearby'].includes(pageType), [pageType]);
+  const isRg = useMemo(() =>
+    ['rg', 'rg-service'].includes(pageType), [pageType]);
+
+  const flatHeadings: Record<string, string> = {
+    'flat-local': 'Local Ambulance in',
+    'flat-local-service': 'Local Ambulance Service in',
+    'flat-emergency': 'Emergency Ambulance in',
+    'flat-service-nearby': 'Ambulance Service Near',
+    'flat-icu': 'ICU Ambulance in',
+    'flat-patient-transport': 'Patient Transport in',
+    'flat-funeral': 'Funeral Service in',
+    'flat-death': 'Death Ambulance in',
+    'flat-mortuary': 'Mortuary Van in',
+    'flat-24hour': '24 Hour Ambulance in',
+    'flat-bed': 'Bed Ambulance in',
+    'flat-ventilator': 'Ventilator Ambulance in',
+    'flat-oxygen': 'Oxygen Ambulance in',
+  };
 
   const headingPrefix = useMemo(() => {
+    if (flatHeadings[pageType]) return flatHeadings[pageType];
     switch (pageType) {
       case 'local': return 'Local Ambulance in';
       case 'near': return 'Ambulance Near';
@@ -125,12 +162,15 @@ export const LocationPage: React.FC = () => {
 
   useEffect(() => {
     if (locationData) {
+      const hp = headingPrefix.replace(/ in$| Near$/, '').trim();
       const title = isLocal
         ? `Local Ambulance in ${locationData.name} | R.G. Ambulance Service`
         : isNear
         ? `Ambulance Near ${locationData.name} | R.G. Ambulance Service`
         : isRg
         ? `R.G. Ambulance Service in ${locationData.name} – 24/7 Emergency Ambulance`
+        : flatHeadings[pageType]
+        ? `${hp} in ${locationData.name} | R.G. Ambulance Service`
         : locationData.meta_title || `Ambulance Service in ${locationData.name} | R.G. Ambulance Service`;
 
       const desc = isLocal
@@ -139,6 +179,8 @@ export const LocationPage: React.FC = () => {
         ? `Ambulance near ${locationData.name} – 24/7 emergency ICU, BLS, and cardiac ambulance services. Call +91 95516 63530.`
         : isRg
         ? `R.G. Ambulance Service in ${locationData.name} – 24/7 ICU, BLS, ALS emergency ambulance. Call +91 95516 63530.`
+        : flatHeadings[pageType]
+        ? `${hp} in ${locationData.name} – 24/7 emergency ambulance service. Call +91 95516 63530.`
         : locationData.meta_description || `Emergency ICU and Ventilator ambulance services in ${locationData.name}. Call +91 95516 63530.`;
 
       const url = `https://www.rgambulanceservice.com/${pathname.startsWith('/') ? pathname.slice(1) : pathname}`;
@@ -577,7 +619,7 @@ export const LocationPage: React.FC = () => {
             <AnimatedSection direction="left">
               <div className="space-y-4 text-center lg:text-left">
                 <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white font-display tracking-tight leading-tight">
-                  Need an {isNear ? 'Ambulance Near' : isLocal ? 'Local Ambulance in' : isRg ? 'R.G. Ambulance in' : 'Ambulance in'} {locationData.name}?
+                  Need {isNear ? 'an Ambulance Near' : isLocal ? 'a Local Ambulance in' : isRg ? 'an R.G. Ambulance in' : flatHeadings[pageType] ? `${flatHeadings[pageType].charAt(0).toLowerCase() === 'a' ? 'an' : 'a'} ${flatHeadings[pageType].trim().replace(/ in$/, '')} in` : 'an Ambulance in'} {locationData.name}?
                 </h3>
                 <p className="text-base text-navy-300 max-w-xl font-body">
                   Our dispatch team is ready. Call our hotline for immediate deployment of a fully equipped ICU ambulance to your location.
