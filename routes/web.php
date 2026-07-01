@@ -76,10 +76,11 @@ Route::get('/rg-ambulance-{slug}', function ($slug) {
     return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
 })->where('slug', '.*');
 
+require __DIR__.'/auth.php';
+
 // Catch-all for React SPA location pages (flat patterns like /surapet-local-ambulance)
+// Must be AFTER auth routes to avoid breaking login/register
 Route::get('/{path}', function () {
     $file = public_path('frontend/index.html');
     return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
 })->where('path', '.*');
-
-require __DIR__.'/auth.php';
