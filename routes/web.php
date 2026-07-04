@@ -25,7 +25,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// React SPA fallback for ambulance location pages (not served by Blade)
+require __DIR__.'/auth.php';
+
+// ============================================================
+// CANONICAL LOCATION PAGE (single canonical URL per area)
+// All non-canonical variants 301 redirect to this pattern
+// ============================================================
 Route::get('/ambulance-services', function () {
     $file = public_path('frontend/index.html');
     return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
@@ -39,48 +44,65 @@ Route::get('/funeral-services', function () {
 Route::get('/ambulance-service-in-{slug}', function ($slug) {
     $file = public_path('frontend/index.html');
     return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
-})->where('slug', '.*');
+})->where('slug', '[a-z0-9-]+');
 
+// ============================================================
+// 301 REDIRECTS: All non-canonical location URL patterns
+// Redirect to canonical /ambulance-service-in-{slug}
+// ============================================================
 Route::get('/local-ambulance-in-{slug}', function ($slug) {
-    $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
-})->where('slug', '.*');
+    return redirect("/ambulance-service-in-$slug", 301);
+})->where('slug', '[a-z0-9-]+');
 
 Route::get('/ambulance-near-{slug}', function ($slug) {
-    $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
-})->where('slug', '.*');
+    return redirect("/ambulance-service-in-$slug", 301);
+})->where('slug', '[a-z0-9-]+');
 
 Route::get('/{slug}/local-ambulance', function ($slug) {
-    $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
-})->where('slug', '.*');
+    return redirect("/ambulance-service-in-$slug", 301);
+})->where('slug', '[a-z0-9-]+');
 
 Route::get('/{slug}/ambulance-service', function ($slug) {
-    $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
-})->where('slug', '.*');
+    return redirect("/ambulance-service-in-$slug", 301);
+})->where('slug', '[a-z0-9-]+');
 
 Route::get('/{slug}/ambulance-nearby', function ($slug) {
-    $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
-})->where('slug', '.*');
+    return redirect("/ambulance-service-in-$slug", 301);
+})->where('slug', '[a-z0-9-]+');
 
 Route::get('/rg-ambulance-service-{slug}', function ($slug) {
-    $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
-})->where('slug', '.*');
+    return redirect("/ambulance-service-in-$slug", 301);
+})->where('slug', '[a-z0-9-]+');
 
 Route::get('/rg-ambulance-{slug}', function ($slug) {
-    $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
-})->where('slug', '.*');
+    return redirect("/ambulance-service-in-$slug", 301);
+})->where('slug', '[a-z0-9-]+');
 
-require __DIR__.'/auth.php';
+// ============================================================
+// FLAT PATTERN REDIRECTS: {slug}-local-ambulance, {slug}-icu-ambulance, etc.
+// Catch them all at the end with a single handler
+// ============================================================
+$flatSuffixes = [
+    '-local-ambulance-service', '-local-ambulance', '-emergency-ambulance',
+    '-ambulance-service-nearby', '-icu-ambulance', '-patient-transport',
+    '-funeral-service', '-death-ambulance', '-mortuary-van',
+    '-24-hour-ambulance', '-bed-ambulance', '-ventilator-ambulance',
+    '-oxygen-ambulance',
+];
 
-// Catch-all for React SPA location pages (flat patterns like /surapet-local-ambulance)
-// Must be AFTER auth routes to avoid breaking login/register
-Route::get('/{path}', function () {
-    $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
-})->where('path', '.*');
+Route::get('/{slug}', function ($slug) {
+    // Strip flat suffix patterns and redirect to canonical
+    $slugRaw = $slug;
+    foreach (['-local-ambulance-service', '-local-ambulance', '-emergency-ambulance',
+        '-ambulance-service-nearby', '-icu-ambulance', '-patient-transport',
+        '-funeral-service', '-death-ambulance', '-mortuary-van',
+        '-24-hour-ambulance', '-bed-ambulance', '-ventilator-ambulance',
+        '-oxygen-ambulance'] as $suffix) {
+        if (str_ends_with($slugRaw, $suffix)) {
+            $area = substr($slugRaw, 0, -strlen($suffix));
+            return redirect("/ambulance-service-in-$area", 301);
+        }
+    }
+    // Non-matching paths: return 404 (no longer serve SPA shell for unknown URLs)
+    abort(404);
+})->where('slug', '[a-z0-9-]+');
