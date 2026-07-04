@@ -33,17 +33,27 @@ require __DIR__.'/auth.php';
 // ============================================================
 Route::get('/ambulance-services', function () {
     $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
+    if (!file_exists($file)) abort(404);
+    return response(file_get_contents($file))
+        ->header('Content-Type', 'text/html')
+        ->header('Link', '<https://www.rgambulanceservice.com/ambulance-services>; rel="canonical"');
 });
 
 Route::get('/funeral-services', function () {
     $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
+    if (!file_exists($file)) abort(404);
+    return response(file_get_contents($file))
+        ->header('Content-Type', 'text/html')
+        ->header('Link', '<https://www.rgambulanceservice.com/funeral-services>; rel="canonical"');
 });
 
 Route::get('/ambulance-service-in-{slug}', function ($slug) {
     $file = public_path('frontend/index.html');
-    return file_exists($file) ? response(file_get_contents($file))->header('Content-Type', 'text/html') : abort(404);
+    if (!file_exists($file)) abort(404);
+    $canonical = url("/ambulance-service-in-$slug");
+    return response(file_get_contents($file))
+        ->header('Content-Type', 'text/html')
+        ->header('Link', "<$canonical>; rel=\"canonical\"");
 })->where('slug', '[a-z0-9-]+');
 
 // ============================================================
@@ -79,30 +89,29 @@ Route::get('/rg-ambulance-{slug}', function ($slug) {
 })->where('slug', '[a-z0-9-]+');
 
 // ============================================================
-// FLAT PATTERN REDIRECTS: {slug}-local-ambulance, {slug}-icu-ambulance, etc.
-// Catch them all at the end with a single handler
+// KEYWORD-RICH FLAT PATTERN PAGES: {slug}-local-ambulance, {slug}-icu-ambulance, etc.
+// These serve the SPA with a canonical Link header pointing to
+// the main /ambulance-service-in-{slug} URL for SEO consolidation.
 // ============================================================
-$flatSuffixes = [
-    '-local-ambulance-service', '-local-ambulance', '-emergency-ambulance',
-    '-ambulance-service-nearby', '-icu-ambulance', '-patient-transport',
-    '-funeral-service', '-death-ambulance', '-mortuary-van',
-    '-24-hour-ambulance', '-bed-ambulance', '-ventilator-ambulance',
-    '-oxygen-ambulance',
-];
-
 Route::get('/{slug}', function ($slug) {
-    // Strip flat suffix patterns and redirect to canonical
     $slugRaw = $slug;
-    foreach (['-local-ambulance-service', '-local-ambulance', '-emergency-ambulance',
+    $suffixes = [
+        '-local-ambulance-service', '-local-ambulance', '-emergency-ambulance',
         '-ambulance-service-nearby', '-icu-ambulance', '-patient-transport',
         '-funeral-service', '-death-ambulance', '-mortuary-van',
         '-24-hour-ambulance', '-bed-ambulance', '-ventilator-ambulance',
-        '-oxygen-ambulance'] as $suffix) {
+        '-oxygen-ambulance',
+    ];
+    foreach ($suffixes as $suffix) {
         if (str_ends_with($slugRaw, $suffix)) {
             $area = substr($slugRaw, 0, -strlen($suffix));
-            return redirect("/ambulance-service-in-$area", 301);
+            $file = public_path('frontend/index.html');
+            if (!file_exists($file)) abort(404);
+            $canonical = url("/ambulance-service-in-$area");
+            return response(file_get_contents($file))
+                ->header('Content-Type', 'text/html')
+                ->header('Link', "<$canonical>; rel=\"canonical\"");
         }
     }
-    // Non-matching paths: return 404 (no longer serve SPA shell for unknown URLs)
     abort(404);
 })->where('slug', '[a-z0-9-]+');
