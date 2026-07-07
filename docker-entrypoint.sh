@@ -47,6 +47,10 @@ mkdir -p /var/www/html/storage/{app/{livewire-tmp,public},framework/{views,cache
 # Storage link
 php artisan storage:link --force 2>/dev/null || true
 
+# Publish Filament assets for admin panel
+php artisan filament:assets --no-interaction 2>/dev/null || true
+php artisan filament:cache-components 2>/dev/null || true
+
 # Cache for production
 if [ "$APP_ENV" = "production" ]; then
     php artisan config:cache || true

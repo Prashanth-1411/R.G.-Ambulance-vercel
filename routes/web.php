@@ -48,12 +48,12 @@ Route::get('/funeral-services', function () {
 });
 
 Route::get('/ambulance-service-in-{slug}', function ($slug) {
-    $file = public_path('frontend/index.html');
-    if (!file_exists($file)) abort(404);
-    $canonical = url("/ambulance-service-in-$slug");
-    return response(file_get_contents($file))
-        ->header('Content-Type', 'text/html')
-        ->header('Link', "<$canonical>; rel=\"canonical\"");
+    $area = \App\Models\ServiceArea::where('slug', 'ambulance-service-in-' . $slug)->where('is_active', true)->first();
+    if (!$area) {
+        // Fallback: look up by just the slug
+        $area = \App\Models\ServiceArea::where('slug', $slug)->where('is_active', true)->first();
+    }
+    return view('frontend.location', compact('area', 'slug'));
 })->where('slug', '[a-z0-9-]+');
 
 // ============================================================
@@ -90,11 +90,17 @@ Route::get('/rg-ambulance-{slug}', function ($slug) {
 
 // ============================================================
 // KEYWORD-RICH FLAT PATTERN PAGES: {slug}-local-ambulance, {slug}-icu-ambulance, etc.
-// These serve the SPA with a canonical Link header pointing to
-// the main /ambulance-service-in-{slug} URL for SEO consolidation.
+// Fallback handler — only runs when no other route matched (avoids intercepting /admin)
 // ============================================================
-Route::get('/{slug}', function ($slug) {
-    $slugRaw = $slug;
+Route::fallback(function () {
+    $path = request()->path();
+    // Skip /admin — let Filament handle it
+    if (str_starts_with($path, 'admin')) {
+        abort(404);
+    }
+    $slugRaw = $path;
+    // Remove optional leading /
+    $slugRaw = ltrim($slugRaw, '/');
     $suffixes = [
         '-local-ambulance-service', '-local-ambulance', '-emergency-ambulance',
         '-ambulance-service-nearby', '-icu-ambulance', '-patient-transport',
@@ -105,13 +111,9 @@ Route::get('/{slug}', function ($slug) {
     foreach ($suffixes as $suffix) {
         if (str_ends_with($slugRaw, $suffix)) {
             $area = substr($slugRaw, 0, -strlen($suffix));
-            $file = public_path('frontend/index.html');
-            if (!file_exists($file)) abort(404);
-            $canonical = url("/ambulance-service-in-$area");
-            return response(file_get_contents($file))
-                ->header('Content-Type', 'text/html')
-                ->header('Link', "<$canonical>; rel=\"canonical\"");
+            // Redirect to canonical — 301 for SEO consolidation
+            return redirect("/ambulance-service-in-$area", 301);
         }
     }
     abort(404);
-})->where('slug', '[a-z0-9-]+');
+});

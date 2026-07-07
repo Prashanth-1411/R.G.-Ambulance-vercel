@@ -31,7 +31,16 @@ class ServiceAreaResource extends Resource
                 Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
             ]),
             Forms\Components\Textarea::make('description')->columnSpanFull(),
+            Forms\Components\Textarea::make('content_html')->columnSpanFull(),
             Forms\Components\TextInput::make('map_link')->columnSpanFull(),
+            Forms\Components\TagsInput::make('faqs')
+                ->label('FAQs (JSON array of {question, answer})')
+                ->columnSpanFull(),
+            Forms\Components\Section::make('SEO')->schema([
+                Forms\Components\TextInput::make('meta_title'),
+                Forms\Components\Textarea::make('meta_description'),
+                Forms\Components\TagsInput::make('meta_keywords'),
+            ])->collapsible(),
         ]);
     }
 

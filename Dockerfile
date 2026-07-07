@@ -50,8 +50,11 @@ COPY . .
 # Install PHP dependencies (production)
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
-# Install and build frontend assets
+# Install and build Laravel Vite assets
 RUN npm install -g svgo && npm install && npm run build
+
+# Install and build React SPA frontend
+RUN cd frontend && npm install && npm run build && mkdir -p ../public/frontend && cp -r dist/* ../public/frontend/
 
 # Configure Apache document root to public/
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
