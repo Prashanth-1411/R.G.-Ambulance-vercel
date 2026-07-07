@@ -48,7 +48,12 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install PHP dependencies (production)
-RUN composer install --optimize-autoloader --no-dev --no-interaction
+# GITHUB_TOKEN is automatically set by Render during Docker builds
+ARG GITHUB_TOKEN
+RUN if [ -n "$GITHUB_TOKEN" ]; then \
+        composer config --global github-oauth.github.com "$GITHUB_TOKEN"; \
+    fi && \
+    composer install --optimize-autoloader --no-dev --no-interaction
 
 # Install and build Laravel Vite assets
 RUN npm install -g svgo && npm install && npm run build
