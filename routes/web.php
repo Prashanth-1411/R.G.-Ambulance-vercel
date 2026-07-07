@@ -48,12 +48,21 @@ Route::get('/funeral-services', function () {
 });
 
 Route::get('/ambulance-service-in-{slug}', function ($slug) {
-    $area = \App\Models\ServiceArea::where('slug', 'ambulance-service-in-' . $slug)->where('is_active', true)->first();
-    if (!$area) {
-        // Fallback: look up by just the slug
-        $area = \App\Models\ServiceArea::where('slug', $slug)->where('is_active', true)->first();
+    try {
+        $area = \App\Models\ServiceArea::where('slug', 'ambulance-service-in-' . $slug)->where('is_active', true)->first();
+        if (!$area) {
+            $area = \App\Models\ServiceArea::where('slug', $slug)->where('is_active', true)->first();
+        }
+        return view('frontend.location', compact('area', 'slug'));
+    } catch (\Throwable $e) {
+        // Fallback: serve SPA if DB/view fails
+        $file = public_path('frontend/index.html');
+        if (!file_exists($file)) abort(404);
+        $canonical = url("/ambulance-service-in-$slug");
+        return response(file_get_contents($file))
+            ->header('Content-Type', 'text/html')
+            ->header('Link', "<$canonical>; rel=\"canonical\"");
     }
-    return view('frontend.location', compact('area', 'slug'));
 })->where('slug', '[a-z0-9-]+');
 
 // ============================================================
